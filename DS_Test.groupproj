@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{D45F2E65-7F4E-4AED-993D-2CC462B06E53}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Server\DS_Server.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Client\DS_Client.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DS_Server">
+        <MSBuild Projects="Server\DS_Server.dproj"/>
+    </Target>
+    <Target Name="DS_Server:Clean">
+        <MSBuild Projects="Server\DS_Server.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DS_Server:Make">
+        <MSBuild Projects="Server\DS_Server.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DS_Client">
+        <MSBuild Projects="Client\DS_Client.dproj"/>
+    </Target>
+    <Target Name="DS_Client:Clean">
+        <MSBuild Projects="Client\DS_Client.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DS_Client:Make">
+        <MSBuild Projects="Client\DS_Client.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DS_Server;DS_Client"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DS_Server:Clean;DS_Client:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DS_Server:Make;DS_Client:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
