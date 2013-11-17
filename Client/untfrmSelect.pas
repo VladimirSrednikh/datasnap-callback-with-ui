@@ -42,8 +42,8 @@ begin
   frm := TfrmSelectString.Create(nil);
   try
     frm.lst1.Items.Assign(AStrs);
-    if frm.ShowModal = mrOk then
-      Result := frm.lst1.ItemIndex;
+    if (frm.ShowModal = mrOk) and (frm.lst1.ItemIndex <> -1) then
+      Result := Integer(frm.lst1.Items.Objects[frm.lst1.ItemIndex]);
   finally
     frm.Free;
   end;

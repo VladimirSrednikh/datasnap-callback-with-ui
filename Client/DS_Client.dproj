@@ -89,7 +89,7 @@
         </DCCReference>
         <DCCReference Include="ClientClassesUnit1.pas"/>
         <DCCReference Include="ClientModuleUnit1.pas">
-            <Form>ClientModule1</Form>
+            <Form>clmClient</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
