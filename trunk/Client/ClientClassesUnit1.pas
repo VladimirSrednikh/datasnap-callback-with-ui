@@ -1,6 +1,6 @@
 //
 // Created by the DataSnap proxy generator.
-// 11.11.2013 22:44:20
+// 17.11.2013 15:30:11
 //
 
 unit ClientClassesUnit1;
@@ -17,12 +17,12 @@ type
     constructor Create(ADBXConnection: TDBXConnection); overload;
     constructor Create(ADBXConnection: TDBXConnection; AInstanceOwner: Boolean); overload;
     destructor Destroy; override;
-    procedure RegisterWare(ID: Integer);
+    procedure RegisterWare(ID: Integer; ClientID: string);
   end;
 
 implementation
 
-procedure TServerMethods1Client.RegisterWare(ID: Integer);
+procedure TServerMethods1Client.RegisterWare(ID: Integer; ClientID: string);
 begin
   if FRegisterWareCommand = nil then
   begin
@@ -32,6 +32,7 @@ begin
     FRegisterWareCommand.Prepare;
   end;
   FRegisterWareCommand.Parameters[0].Value.SetInt32(ID);
+  FRegisterWareCommand.Parameters[1].Value.SetWideString(ClientID);
   FRegisterWareCommand.ExecuteUpdate;
 end;
 

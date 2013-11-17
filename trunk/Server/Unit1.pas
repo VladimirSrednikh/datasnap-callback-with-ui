@@ -15,7 +15,8 @@ type
     { Private declarations }
   public
     { Public declarations }
-    procedure LogStr(AStr: string);
+    procedure LogMsg(const AStr: string);
+    procedure QueueLogMsg(const AStr: string);
   end;
 
 var
@@ -32,9 +33,19 @@ begin
   ServerContainer1.DSServer1.Stop;
 end;
 
-procedure TForm1.LogStr(AStr: string);
+procedure TForm1.LogMsg(const AStr: string);
 begin
   mmoLog.Lines.Add(AStr);
+end;
+
+procedure TForm1.QueueLogMsg(const AStr: string);
+begin
+  TThread.Queue(nil,
+    procedure
+    begin
+      LogMsg(AStr)
+    end
+  );
 end;
 
 end.

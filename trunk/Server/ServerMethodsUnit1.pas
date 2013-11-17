@@ -5,6 +5,7 @@ interface
 uses System.SysUtils, System.Classes, Datasnap.DSServer, Datasnap.DSAuth,
   Datasnap.DSProxy, Data.DBXJSON,
   Windows,
+  Unit1,
   Vcl.Dialogs;
 
 type
@@ -14,7 +15,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    procedure RegisterWare(ID: Integer);
+    procedure RegisterWare(ID: Integer; ClientID: string);
   end;
 {$METHODINFO OFF}
 
@@ -22,25 +23,33 @@ implementation
 
 {$R *.dfm}
 
-uses {System.StrUtils,} ServerContainerUnit1;
+uses ServerContainerUnit1;
 
-procedure TServerMethods1.RegisterWare(ID: Integer);
+procedure TServerMethods1.RegisterWare(ID: Integer; ClientID: string);
 var
-  Params: TJSONObject;
+  Params, ParamsServ: TJSONObject;
   ResObj: TJSONValue;
+  temp: TJSONValue;
 begin
   ResObj := nil;
-  OutputDebugString(PChar(GetCurrentThreadId.ToString() + ' Server RegisterWare start'));
   Params := TJSONObject.Create;
   Params.AddPair(TJSONPair.Create('1', 'Размер 42'));
   Params.AddPair(TJSONPair.Create('2', 'Размер 43'));
   Params.AddPair(TJSONPair.Create('3', 'Размер 44'));
-  ServerContainer1.DSServer1.NotifyCallback('612888.388581.621832', 'SelectString', Params, ResObj);
+  ParamsServ := TJSONObject(Params.Clone);
+  ServerContainer1.DSServer1.NotifyCallback(ClientID, 'SelectString', Params, ResObj);
   if Assigned(ResObj) then
-    OutputDebugString(PChar(GetCurrentThreadId.ToString() + ' Server RegisterWare End Result = ' + ResObj.ToString()))
+    begin
+      temp := ParamsServ.GetValue(ResObj.Value);
+      if Assigned(temp) then
+        Form1.QueueLogMsg(Format('RegisterWare %d с разрезом %s', [ID, temp.ToString]))
+      else
+        Form1.QueueLogMsg(Format('RegisterWare %d без разреза', [ID]));
+      ResObj.Free;
+      ParamsServ.Free;
+    end
   else
-    OutputDebugString(PChar(GetCurrentThreadId.ToString() + ' Server RegisterWare End Result = nil'));
-  ResObj.Free;
+    Form1.QueueLogMsg(Format('RegisterWare %d без разреза', [ID]));
 end;
 
 end.

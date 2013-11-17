@@ -10,7 +10,7 @@ uses
   Datasnap.DSCommon, Datasnap.DSSession;
 
 type
-  TClientModule1 = class(TDataModule)
+  TclmClient = class(TDataModule)
     SQLConnection1: TSQLConnection;
     DSClientCallbackChannelManager1: TDSClientCallbackChannelManager;
     procedure DataModuleCreate(Sender: TObject);
@@ -35,7 +35,7 @@ end;
   end;
 
 var
-  ClientModule1: TClientModule1;
+  clmClient: TclmClient;
 
 implementation
 
@@ -45,26 +45,26 @@ Uses untfrmSelect;
 
 {$R *.dfm}
 
-constructor TClientModule1.Create(AOwner: TComponent);
+constructor TclmClient.Create(AOwner: TComponent);
 begin
   inherited;
   FInstanceOwner := True;
 end;
 
-procedure TClientModule1.DataModuleCreate(Sender: TObject);
+procedure TclmClient.DataModuleCreate(Sender: TObject);
 begin
   SQLConnection1.Connected := True;
-//  DSClientCallbackChannelManager1.ManagerId := TDSTunnelSession.GenerateSessionId;
+  DSClientCallbackChannelManager1.ManagerId := TDSTunnelSession.GenerateSessionId;
   DSClientCallbackChannelManager1.RegisterCallback('SelectString', TmyCallback.Create);
 end;
 
-destructor TClientModule1.Destroy;
+destructor TclmClient.Destroy;
 begin
   FServerMethods1Client.Free;
   inherited;
 end;
 
-function TClientModule1.GetServerMethods1Client: TServerMethods1Client;
+function TclmClient.GetServerMethods1Client: TServerMethods1Client;
 begin
   if FServerMethods1Client = nil then
   begin
@@ -78,9 +78,7 @@ end;
 
 function TmyCallback.Execute(const Arg: TJSONValue): TJSONValue;
 begin
-  OutputDebugString(PChar(GetCurrentThreadId.ToString() + ' TmyCallback.Execute start'));
-//  Application.ProcessMessages;
-  TThread.Synchronize(nil, procedure()
+  TThread.Synchronize(nil, procedure()  // запрос данных у пользователя - только в основном потоке
     begin
       SelectString(Arg);
     end);
@@ -109,6 +107,7 @@ begin
       strs.Free;
     end;
   end;
+  enum.Free;
 end;
 
 end.

@@ -1,4 +1,4 @@
-object ClientModule1: TClientModule1
+object clmClient: TclmClient
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   Height = 271
@@ -10,8 +10,8 @@ object ClientModule1: TClientModule1
       'Port=211'
       'CommunicationProtocol=tcp/ip'
       'DatasnapContext=datasnap/')
-    Left = 48
-    Top = 40
+    Left = 40
+    Top = 24
     UniqueId = '{71F55ED3-C4BB-4897-A396-B0F045963173}'
   end
   object DSClientCallbackChannelManager1: TDSClientCallbackChannelManager
